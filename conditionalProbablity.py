@@ -27,6 +27,13 @@ def generateProb(givenInt, coVarMat, meanPt):
     e = np.matmul(np.matmul(np.transpose(ptMinMean), inv_CoVarMatrix), ptMinMean) / (-2)
     return constant * math.exp(e)
 
+def sendColorInfo(color):
+    if color == 'green':
+        return GREEN
+    if color == 'orange':
+        return ORANGE
+    if color == 'yellow':
+        return YELLOW
 
 reader = csv.reader(open('green.csv', 'r'))
 for row in reader:
