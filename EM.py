@@ -3,6 +3,7 @@ import random
 import csv
 import math
 import yaml
+import matplotlib.pyplot as plt
 
 csv.field_size_limit(1000000000)
 GMM_Global = {}
@@ -27,6 +28,8 @@ def generateProb(givenInt, coVarMat, meanPt):
 	# print(np.matmul(ptMinMean, inv_CoVarMatrix))
 	return constant * math.exp(e)
 
+def gaussian(x, mu, sigma):
+	return ((1/(sigma *math.sqrt(2 * math.pi))) * np.exp(-np.power(x-mu,2)/(2*np.power(sigma,2))))
 
 def getGMM(colorClass):
 	DICT = {}
@@ -131,6 +134,24 @@ def getGMM(colorClass):
 			data['covMats'][i][j] = {}
 			for k in range(3):
 				data['covMats'][i][j][k] = float(covs[i][j][k])
+
+	mean_b = data['means'][0][2]
+	mean_g = data['means'][0][1]
+	mean_r = data['means'][0][0]
+
+	std_b = data['covMats'][0][0]
+	std_g = data['covMats'][1][1]
+	std_r = data['covMats'][2][2]
+
+	x = list(range(0,256))
+	gauss_b = gaussian(x, mean_b, std_b)
+	gauss_g = gaussian(x, mean_g, std_g)
+	gauss_r = gaussian(x, mean_r, std_r)
+
+	plt.plot(gauss_b,color='b')
+	plt.plot(gauss_g, color='g')
+	plt.plot(gauss_r, color='r')
+
 
 	with open(colorClass + '_GMM.yaml', mode='w') as file:
 		yaml.dump(data, file)
